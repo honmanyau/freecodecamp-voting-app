@@ -88,34 +88,35 @@ class CreatePoll extends Component {
   render() {
     const options = this.state.pollOptions.options.map((pollOption, index) => {
       return (
-        <div key={index}>
-          <TextField
-            type="text"
-            value={this.state.pollOptions.options[index]}
-            hintText={"Option"}
-            errorText={this.state.pollOptions.error}
-            floatingLabelText={index === 0 ? "Options:" : null}
-            floatingLabelFixed={true}
-            onChange={(event) => {
-              const newList = this.state.pollOptions.options.slice();
-              newList[index] = event.target.value;
+        <TextField
+          fullWidth
+          key={index}
+          type="text"
+          value={this.state.pollOptions.options[index]}
+          hintText={"Option"}
+          errorText={this.state.pollOptions.error}
+          floatingLabelText={index === 0 ? "Options:" : null}
+          floatingLabelFixed={true}
+          onChange={(event) => {
+            const newList = this.state.pollOptions.options.slice();
+            newList[index] = event.target.value;
 
-              return this.setState({
-                pollOptions: {
-                  options: newList,
-                  error: null
-                }
-              })
-            }}
-          />
-        </div>
+            return this.setState({
+              pollOptions: {
+                options: newList,
+                error: null
+              }
+            })
+          }}
+        />
       )
     });
 
     const styles = {
       width: '38%',
       display: 'inline-flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      alignItems: 'center'
     }
 
     return(
@@ -123,6 +124,7 @@ class CreatePoll extends Component {
         <CardText style={{textAlign: 'center'}}>
           <div style={styles}>
             <TextField
+              fullWidth
               type="text"
               value={this.state.title.text}
               hintText="Poll Title"
