@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 
 import * as PollActions from '../actions/poll';
 
-import { Card, CardActions, CardText } from 'material-ui/Card';
+import { Card, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -46,7 +46,9 @@ class CreatePoll extends Component {
 
   handleCreatePollButtonClick() {
     const arr = this.state.pollOptions.options;
+    const filteredArr = arr.filter(item => item !== "");
     const testArr = Array.from(new Set(arr));
+    const testFilteredArr = Array.from(new Set(filteredArr));
 
     if (!this.state.title.text) {
       this.setState({
@@ -56,7 +58,7 @@ class CreatePoll extends Component {
         }
       });
     }
-    else if (arr.filter(item => item !== "").length < 2) {
+    else if (filteredArr.length < 2) {
       this.setState({
         pollOptions: {
           options: this.state.pollOptions.options,
@@ -64,7 +66,7 @@ class CreatePoll extends Component {
         }
       });
     }
-    else if (arr.length !== testArr.length) {
+    else if (filteredArr.length !== testFilteredArr.length) {
       this.setState({
         pollOptions: {
           options: this.state.pollOptions.options,
@@ -78,7 +80,7 @@ class CreatePoll extends Component {
         ownerUid: this.props.user.data.uid,
         created: new Date().getTime().toString(),
         title: this.state.title.text,
-        options: this.state.pollOptions.options.map(option => {return {item: option}})
+        options: filteredArr.map(option => {return {item: option}})
       });
 
       this.setState(Object.assign({}, initialState));

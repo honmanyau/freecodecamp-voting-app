@@ -33,7 +33,11 @@ class Dashboard extends Component {
       polls = 'Meows are fetching your polls for you!';
     }
     else if (this.props.fetch.content) {
-      polls = this.props.fetch.content.map(poll => {
+      const content = this.props.fetch.content;
+
+      polls = Object.keys(content).map(id => {
+        const poll = content[id];
+        
         return (
           <PollsCard key={poll.id} pollData={poll} />
         )
