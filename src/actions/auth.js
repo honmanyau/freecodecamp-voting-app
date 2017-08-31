@@ -26,7 +26,14 @@ export function registerUser(email, password, username) {
   return function(dispatch) {
     firebase.auth().createUserWithEmailAndPassword(email, password)
       .then(user => {
-        dispatch(authUser(user));
+        user.updateProfile({
+          displayName: username
+        })
+        .then(() => {
+          dispatch(authUser(user));
+        })
+        .catch((error) => console.log('Error occured when updating the display name of ' + user.email + '.'))
+
       })
       .catch(error => {
         console.log("Error during registration authentication.", error);
@@ -51,7 +58,7 @@ export function signInUser(email, password) {
 export function signOutUser() {
   return function(dispatch) {
     dispatch(authInProgress(true));
-    
+
     firebase.auth().signOut()
       .then(() => {
         dispatch({

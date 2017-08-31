@@ -17,29 +17,70 @@ class Register extends React.Component {
     super(props);
 
     this.state = {
-      username: '',
-      email: '',
-      password: '',
-      passwordConfirmation: '',
+      username: {
+        text: '',
+        error: null
+      },
+      email: {
+        text: '',
+        error: null
+      },
+      password: {
+        text: '',
+        error: null
+      },
+      passwordConfirmation: {
+        text: ''
+      },
       errorMessage: '',
       redirect: false
     };
   }
 
   register() {
-    const authError = this.props.actions.authError;
     const registerUser = this.props.actions.registerUser;
 
-    if (this.state.username.length < 1) {
-      return authError('Please enter a username.');
+    if (this.state.username.text < 1) {
+      const newUsernameState = Object.assign({}, this.state.username, {
+        error: 'Please enter a username.'
+      });
+
+      this.setState({username: newUsernameState});
     }
 
-    // Password checking should be implemented server-side
-    if (this.state.password === this.state.passwordConfirmation && this.state.username.length > 0) {
-      return registerUser(this.state.email, this.state.password, this.state.username);
+    if (!this.state.email.text.match(/.+@.*?\..+/)) {
+      const newEmailState = Object.assign({}, this.state.email, {
+        error: 'The e-mail is badly formatted.'
+      });
+
+      this.setState({email: newEmailState});
     }
-    else {
-      return authError('The passwords entered do not match.');
+
+    if (this.state.password.text.length === 0) {
+      const newPasswordState = Object.assign({}, this.state.password, {
+        error: 'Please enter a password.'
+      });
+
+      this.setState({password: newPasswordState});
+    }
+    else if (this.state.password.text.length < 6) {
+      const newPasswordState = Object.assign({}, this.state.password, {
+        error: 'The password must contain at least 6 characters.'
+      });
+
+      this.setState({password: newPasswordState});
+    }
+
+    if (this.state.password.text !== this.state.passwordConfirmation.text) {
+      const newPasswordState = Object.assign({}, this.state.password, {
+        error: 'The passwords entered do not match.'
+      });
+
+      this.setState({password: newPasswordState});
+    }
+
+    if (this.state.password.text === this.state.passwordConfirmation.text && this.state.username.text.length > 0) {
+      return registerUser(this.state.email.text, this.state.password.text, this.state.username.text);
     }
   }
 
@@ -52,28 +93,40 @@ class Register extends React.Component {
       <CommonPaper>
         <TextField
           type="text"
-          value={this.state.username}
+          value={this.state.username.text}
           hintText="Username"
+          errorText={this.state.username.error}
           onChange={(event) => this.setState({
-            username: event.target.value
+            username: {
+              text: event.target.value,
+              error: null
+            }
           })}
         />
 
         <TextField
           type="text"
-          value={this.state.email}
+          value={this.state.email.text}
           hintText="E-mail address"
+          errorText={this.state.email.error}
           onChange={(event) => this.setState({
-            email: event.target.value
+            email: {
+              text: event.target.value,
+              error: null
+            }
           })}
         />
 
         <TextField
           type="password"
-          value={this.state.password}
+          value={this.state.password.text}
           hintText="Password"
+          errorText={this.state.password.error}
           onChange={(event) => this.setState({
-            password: event.target.value
+            password: {
+              text: event.target.value,
+              error: null
+            }
           })}
           onKeyPress={(event) => {
             if (event.key === "Enter") {
@@ -84,10 +137,14 @@ class Register extends React.Component {
 
         <TextField
           type="password"
-          value={this.state.passwordConfirmation}
+          value={this.state.passwordConfirmation.text}
           hintText="Confirm Password"
+          errorText={this.state.password.error}
           onChange={(event) => this.setState({
-            passwordConfirmation: event.target.value
+            passwordConfirmation: {
+              text: event.target.value,
+              error: null
+            }
           })}
           onKeyPress={(event) => {
             if (event.key === "Enter") {

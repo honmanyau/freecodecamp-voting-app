@@ -47,7 +47,6 @@ class CreatePoll extends Component {
   handleCreatePollButtonClick() {
     const arr = this.state.pollOptions.options;
     const filteredArr = arr.filter(item => item !== "");
-    const testArr = Array.from(new Set(arr));
     const testFilteredArr = Array.from(new Set(filteredArr));
 
     if (!this.state.title.text) {
