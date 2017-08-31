@@ -11,7 +11,6 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
 const initialState = {
-  expanded: false,
   title: {
     text: '',
     error: null
@@ -82,7 +81,7 @@ class CreatePoll extends Component {
         options: this.state.pollOptions.options.map(option => {return {item: option}})
       });
 
-      this.setState(Object.assign({}, initialState, {expanded: true}));
+      this.setState(Object.assign({}, initialState));
     }
   }
 
@@ -113,17 +112,16 @@ class CreatePoll extends Component {
       )
     });
 
+    const styles = {
+      width: '38%',
+      display: 'inline-flex',
+      flexDirection: 'column'
+    }
+
     return(
-      <Card expanded={this.state.expanded}>
-        <CardActions>
-          Clear fields after submitting, perhaps redirect.
-          <RaisedButton
-            label="New Poll"
-            onClick={() => this.setState({expanded: !this.state.expanded})}
-          />
-        </CardActions>
-        <CardText expandable={true}>
-          <div style={{width: '38%'}}>
+      <Card>
+        <CardText style={{textAlign: 'center'}}>
+          <div style={styles}>
             <TextField
               type="text"
               value={this.state.title.text}

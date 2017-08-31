@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { withRouter } from 'react-router-dom';
 
 import * as FetchActions from '../actions/fetch';
 
-import { Card, CardTitle, CardText } from 'material-ui/Card';
+import { Card, CardActions, CardTitle, CardText } from 'material-ui/Card';
+import RaisedButton from 'material-ui/RaisedButton';
 
 import PollsCard from './PollsCard';
 import CreatePoll from './CreatePoll';
@@ -12,6 +14,14 @@ import CreatePoll from './CreatePoll';
 
 
 class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      expanded: false
+    };
+  }
+
   componentDidMount() {
     this.props.actions.fetchUserPolls(this.props.user.data.uid);
   }
@@ -35,12 +45,23 @@ class Dashboard extends Component {
 
     return(
       <div>
-        <CreatePoll create />
-
-        <Card>
+        <Card expanded={this.state.expanded}>
           <CardTitle
-            title={`Hello, ${this.props.user.data.displayName}! These are your polls:`}
+            title={`Hello, ${this.props.user.data.displayName}!`}
+            subtitle={'Here you can edit the polls that you have created or create a new one by clicking on "NEW POLL".'}
           />
+
+          <CardActions style={{padding: '8px 16px'}}>
+            <RaisedButton
+              primary
+              label="New Poll"
+              onClick={() => this.setState({expanded: !this.state.expanded})}
+            />
+          </CardActions>
+
+          <CardText expandable>
+            <CreatePoll create />
+          </CardText>
 
           <CardText>
             {polls}
@@ -64,4 +85,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Dashboard));
