@@ -93,7 +93,7 @@ class PollsCardPrivate extends Component {
 
       this.setState(Object.assign({}, initialState, {
         title: {
-          text: this.props.pollData.title,
+          text: this.state.title.text,
           error: null
         }
       }))
