@@ -39,12 +39,14 @@ class Home extends React.Component {
       <Card>
         <CardTitle
           title="Featured Polls"
+          subtitle="Interesting polls that hand-picked for you!"
         />
         <CardText>
           {this.props.fetch.isFetching ? "Meows fetching polls for you!" : featuredPolls}
         </CardText>
         <CardTitle
           title="Latest Polls"
+          subtitle="Find out what's happening in the world of Volt!"
         />
         <CardText>
           {this.props.fetch.isFetching ? "Meows fetching polls for you!" : polls}

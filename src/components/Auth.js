@@ -21,10 +21,6 @@ class Auth extends Component {
     }
   }
 
-  componentWillMount() {
-
-  }
-
   handleButtonClick = () => {
     if (this.props.user.authenticated) {
       this.props.actions.signOutUser();

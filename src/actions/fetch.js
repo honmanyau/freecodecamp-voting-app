@@ -1,10 +1,13 @@
 import firebase from '../firebase';
 
+
+
 export const FETCHING_POLLS = 'FETCHING_POLLS';
 export const FETCH_LATEST_POLLS = 'FETCH_LATEST_POLLS';
 export const FETCH_USER_POLLS = 'FETCH_USER_POLLS';
 export const STORE_POLLS = 'STORE_POLLS';
 export const FETCH_ERROR = 'FETCH_ERROR';
+export const CREATING_POLL = 'CREATING_POLL';
 
 export function fetchLatestPolls() {
   return function(dispatch) {
@@ -53,6 +56,15 @@ export function fetchError(error) {
     type: FETCH_ERROR,
     payload: {
       error: JSON.stringify(error)
+    }
+  }
+}
+
+export function creatingPoll(tempPolls) {
+  return {
+    type: CREATING_POLL,
+    payload: {
+      tempPolls
     }
   }
 }

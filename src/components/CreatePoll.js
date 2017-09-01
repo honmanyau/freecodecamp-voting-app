@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as PollActions from '../actions/poll';
+import * as FetchActions from '../actions/fetch';
 
 import { Card, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -30,6 +31,7 @@ class CreatePoll extends Component {
 
     this.state = Object.assign({}, initialState);
   }
+
 
   addOption() {
     const newList = this.state.pollOptions.options.slice();
@@ -74,6 +76,26 @@ class CreatePoll extends Component {
       });
     }
     else {
+      const content = this.props.fetch.content;
+      let tempPolls = {};
+      const dummyPoll = {
+        temp: {
+          owner: this.props.user.data.displayName,
+          ownerUid: this.props.user.data.uid,
+          id: 'temp',
+          title: 'Creating poll: ' + this.state.title.text
+        }
+      };
+
+      if (!content) {
+        tempPolls = dummyPoll;
+      }
+      else {
+        tempPolls = Object.assign({}, content, dummyPoll);
+      }
+
+      this.props.actions.creatingPoll(tempPolls);
+
       this.props.actions.createPoll({
         owner: this.props.user.data.displayName,
         ownerUid: this.props.user.data.uid,
@@ -82,6 +104,7 @@ class CreatePoll extends Component {
         options: filteredArr.map(option => {return {item: option}})
       });
 
+      // For collapsing the expanded form, which is handled in ./Dashboard
       this.props.onSubmit();
 
       this.setState(Object.assign({}, initialState));
@@ -178,13 +201,13 @@ class CreatePoll extends Component {
 const mapStateToProps = (state) => {
   return {
     user: state.user,
-    poll: state.poll
+    fetch: state.fetch
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    actions: bindActionCreators(PollActions, dispatch)
+    actions: bindActionCreators(Object.assign({}, PollActions, FetchActions), dispatch)
   }
 }
 

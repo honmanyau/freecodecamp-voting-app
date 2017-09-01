@@ -44,9 +44,12 @@ class Dashboard extends Component {
       polls = Object.keys(content).map(id => {
         const poll = content[id];
 
-        return (
-          <PollsCard key={poll.id} pollData={poll} />
-        )
+        if (poll.id === 'temp') {
+          return <Card key={poll.id}><CardTitle title={poll.title} /></Card>
+        }
+        else {
+          return <PollsCard key={poll.id} pollData={poll} />
+        }
       })
     }
     else {
