@@ -15,30 +15,39 @@ class Home extends React.Component {
   }
 
   render() {
-    let polls = null;
+    let polls = [];
+    let featuredPolls = [];
 
-    if (this.props.fetch.isFetching) {
-      polls = "Meows fetching polls for you!";
-    }
-    else if (this.props.fetch.content) {
+    if (this.props.fetch.content) {
       const content = this.props.fetch.content;
+      const pollList = Object.keys(content).map(id => {
+        return content[id];
+      });
 
-      polls = Object.keys(content).map(id => {
-        const poll = content[id];
+      polls = pollList.map(poll => {
+        if (poll.featured) {
+          featuredPolls.push(<PollsCard key={poll.id} pollData={poll} featured />);
+        }
 
         return (
           <PollsCard key={poll.id} pollData={poll} />
         )
-      })
+      }).reverse();
     }
 
     return(
       <Card>
         <CardTitle
+          title="Featured Polls"
+        />
+        <CardText>
+          {this.props.fetch.isFetching ? "Meows fetching polls for you!" : featuredPolls}
+        </CardText>
+        <CardTitle
           title="Latest Polls"
         />
         <CardText>
-          {polls}
+          {this.props.fetch.isFetching ? "Meows fetching polls for you!" : polls}
         </CardText>
       </Card>
     )
