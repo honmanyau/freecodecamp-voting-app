@@ -26,6 +26,12 @@ class Dashboard extends Component {
     this.props.actions.fetchUserPolls(this.props.user.data.uid);
   }
 
+  handleCreatePollSubmission() {
+    this.setState({
+      expanded: false
+    })
+  }
+
   render() {
     let polls = null;
 
@@ -37,7 +43,7 @@ class Dashboard extends Component {
 
       polls = Object.keys(content).map(id => {
         const poll = content[id];
-        
+
         return (
           <PollsCard key={poll.id} pollData={poll} />
         )
@@ -64,7 +70,7 @@ class Dashboard extends Component {
           </CardActions>
 
           <CardText expandable>
-            <CreatePoll create />
+            <CreatePoll create onSubmit={() => this.handleCreatePollSubmission()} />
           </CardText>
 
           <CardText>

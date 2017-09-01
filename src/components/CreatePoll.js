@@ -82,6 +82,8 @@ class CreatePoll extends Component {
         options: filteredArr.map(option => {return {item: option}})
       });
 
+      this.props.onSubmit();
+
       this.setState(Object.assign({}, initialState));
     }
   }
