@@ -28,6 +28,10 @@ class SignIn extends React.Component {
     this.props.actions.signInUser(this.state.email, this.state.password);
   }
 
+  signInWithTwitter() {
+    this.props.actions.signInUserWithTwitter();
+  }
+
   render() {
     return(
       <CommonPaper>
@@ -66,6 +70,13 @@ class SignIn extends React.Component {
             primary
             label="Sign in"
             onClick={() => this.signIn()}
+          />
+        </div>
+        <div>
+          <FlatButton
+            primary
+            label="Sign in with Twitter"
+            onClick={() => this.signInWithTwitter()}
           />
         </div>
 

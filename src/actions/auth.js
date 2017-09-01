@@ -1,10 +1,9 @@
-import firebase from '../firebase';
+import firebase, { twitterAuthProvider } from '../firebase';
 
 export const AUTH_IN_PROGRESS = 'AUTH_IN_PROGRESS';
 export const AUTH_USER = 'AUTH_USER';
 export const AUTH_ERROR = 'AUTH_ERROR';
 export const SIGN_OUT_USER = 'SIGN_OUT_USER';
-
 
 
 export function checkAuth() {
@@ -52,6 +51,13 @@ export function signInUser(email, password) {
         console.log("Error during sign-in authentication.", error);
         dispatch(authError(error.message));
       });
+  }
+}
+
+export function signInUserWithTwitter() {
+  return function(dispatch) {
+    firebase.auth().signInWithRedirect(twitterAuthProvider)
+      .catch(error => console.log('Error occured during Twitter sign in.'));
   }
 }
 
