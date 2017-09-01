@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { withRouter } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 
 import * as AuthActions from '../actions/auth';
 
@@ -21,13 +21,17 @@ class Auth extends Component {
     }
   }
 
+  componentWillMount() {
+
+  }
+
   handleButtonClick = () => {
     if (this.props.user.authenticated) {
       this.props.actions.signOutUser();
       this.props.history.push('/');
     }
     else {
-      this.props.history.push('/signin');
+      this.props.actions.signInUserWithTwitter()
     }
   }
 
@@ -38,7 +42,13 @@ class Auth extends Component {
           title="Volt"
           iconElementRight={
             <FlatButton
-              label={this.props.user.authenticated ? "Sign out" : "Sign in"}
+              disabled={this.props.user.inProgress ? true : null}
+              label={
+                this.props.user.authenticated ?
+                  'Sign out'
+                  :
+                  (this.props.user.inProgress ? 'Signing in' : 'Sign in with Twitter')
+              }
             />
           }
           onRightIconButtonTouchTap={() => this.handleButtonClick()}
@@ -67,6 +77,8 @@ class Auth extends Component {
               null
           }
         </Drawer>
+
+        {this.props.user.authenticated && !this.props.user.inProgress ? <Redirect to='/dashboard' /> : null}
       </div>
     )
   }

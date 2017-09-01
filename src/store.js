@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
-import { checkAuth } from './actions/auth';
+import { checkAuth, checkProviderAuth } from './actions/auth';
 import reducer from './reducers';
 
 
@@ -12,6 +12,7 @@ const store = createStore(
 );
 
 store.dispatch(checkAuth());
+store.dispatch(checkProviderAuth());
 
 console.log(store.getState());
 

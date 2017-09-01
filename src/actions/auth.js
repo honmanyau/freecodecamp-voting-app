@@ -21,6 +21,21 @@ export function checkAuth() {
   }
 }
 
+export function checkProviderAuth() {
+  return function(dispatch) {
+    dispatch(authInProgress(true));
+
+    firebase.auth().getRedirectResult()
+      .then(result => {
+        if (result && !result.user) {
+          dispatch(authInProgress(false));
+        }
+        // authUser(result.user) is not invoked here as checkAuth() is already listening to the change
+      })
+      .catch(error => console.log('Error occured during provider authentication.', error))
+  }
+}
+
 export function registerUser(email, password, username) {
   return function(dispatch) {
     firebase.auth().createUserWithEmailAndPassword(email, password)
