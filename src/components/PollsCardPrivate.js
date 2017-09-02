@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as PollActions from '../actions/poll';
+import * as FetchActions from '../actions/fetch';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
@@ -77,17 +78,34 @@ class PollsCardPrivate extends Component {
       });
     }
     else {
-      this.props.actions.editPoll({
-        id: this.props.pollData.id,
-        owner: this.props.pollData.owner,
-        ownerUid: this.props.pollData.ownerUid,
-        created: this.props.pollData.created,
+      const editedPoll = Object.assign({}, this.props.pollData, {
         title: this.state.title.text,
         options: arr.filter(item => item.length > 0).length > 0 ?
           this.state.pollOptions.options.map(option => {return {item: option}})
           :
           null
       });
+      const polls = Object.assign({}, this.props.fetch.content);
+      const newPolls = Object.keys(polls).map(key => {
+      const poll = polls[key];
+
+        if (polls[key].id === editedPoll.id) {
+          return Object.assign({}, editedPoll, {
+            options: poll.options.concat(editedPoll.options ? editedPoll.options.map(option => {
+              return {
+                item: option.item,
+                votes: 0,
+                count: 0
+              }
+            }) : [])
+          });
+        }
+
+        return poll;
+      });
+
+      this.props.actions.editPoll(editedPoll);
+      this.props.actions.editingPoll(newPolls);
 
       this.setState(Object.assign({}, initialState, {
         title: {
@@ -155,7 +173,7 @@ class PollsCardPrivate extends Component {
         <div style={{textAlign: 'center'}}>
           <FloatingActionButton
             mini
-            backgroundColor="white"
+            backgroundColor="#fff"
             color="black"
           >
             <ContentAdd
@@ -195,7 +213,7 @@ class PollsCardPrivate extends Component {
         <RaisedButton
           label="Tweet"
           backgroundColor='#00aced'
-          labelColor='white'
+          labelColor='#fff'
           onClick={() => window.open(`https://twitter.com/intent/tweet?text=Vote%20on%20Volt%3A%20${this.props.pollData.title}%0D%0A%0D%0Ahttps://freecodecamp-volt.firebaseapp.com/poll/${this.props.pollData.id}`)}
         />
       </div>
@@ -203,10 +221,16 @@ class PollsCardPrivate extends Component {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = (state) => {
   return {
-    actions: bindActionCreators(PollActions, dispatch)
+    fetch: state.fetch
   }
 }
 
-export default connect(null, mapDispatchToProps)(PollsCardPrivate);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: bindActionCreators(Object.assign({}, PollActions, FetchActions), dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PollsCardPrivate);

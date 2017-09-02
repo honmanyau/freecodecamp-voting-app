@@ -45,7 +45,7 @@ class Dashboard extends Component {
         const poll = content[id];
 
         if (poll.id === 'temp') {
-          return <Card key={poll.id}><CardTitle title={poll.title} /></Card>
+          return <Card key={poll.id}><CardTitle title={poll.title} subtitle='Meows are working hard in the background to create your poll!'/></Card>
         }
         else {
           return <PollsCard key={poll.id} pollData={poll} />

@@ -9,6 +9,7 @@ export const STORE_POLLS = 'STORE_POLLS';
 export const FETCH_ERROR = 'FETCH_ERROR';
 export const CREATING_POLL = 'CREATING_POLL';
 export const SUBMITTING_VOTE = 'SUBMITTING_VOTE';
+export const EDITING_POLL = 'EDITING_POLL';
 
 export function fetchLatestPolls() {
   return function(dispatch) {
@@ -73,6 +74,15 @@ export function creatingPoll(tempPolls) {
 export function submittingVote(tempPolls) {
   return {
     type: SUBMITTING_VOTE,
+    payload: {
+      tempPolls
+    }
+  }
+}
+
+export function editingPoll(tempPolls) {
+  return {
+    type: EDITING_POLL,
     payload: {
       tempPolls
     }
