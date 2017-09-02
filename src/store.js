@@ -14,6 +14,6 @@ const store = createStore(
 store.dispatch(checkAuth());
 store.dispatch(checkProviderAuth());
 
-console.log(store.getState());
+//console.log(store.getState());
 
 export default store;

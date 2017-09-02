@@ -87,7 +87,7 @@ class PollsCardPrivate extends Component {
       });
       const polls = Object.assign({}, this.props.fetch.content);
       const newPolls = Object.keys(polls).map(key => {
-      const poll = polls[key];
+        const poll = polls[key];
 
         if (polls[key].id === editedPoll.id) {
           return Object.assign({}, editedPoll, {
@@ -114,6 +114,21 @@ class PollsCardPrivate extends Component {
         }
       }))
     }
+  }
+
+  handleConfirmDeleteButtonClick() {
+    const polls = Object.assign({}, this.props.fetch.content);
+    const newPolls = Object.keys(polls).reduce((acc, key) => {
+      const poll = polls[key];
+      if (poll.id !== this.props.pollData.id) {
+        acc.push(poll);
+      }
+
+      return acc;
+    }, []);
+
+    this.props.actions.deletePoll(this.props.pollData);
+    this.props.actions.deletingPoll(newPolls);
   }
 
   render() {
@@ -198,7 +213,7 @@ class PollsCardPrivate extends Component {
             <RaisedButton
               secondary
               label="--Confirm Delete--"
-              onClick={() => this.props.actions.deletePoll(this.props.pollData)}
+              onClick={() => this.handleConfirmDeleteButtonClick()}
             />
             :
             <RaisedButton
