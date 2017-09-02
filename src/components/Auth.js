@@ -72,6 +72,7 @@ class Auth extends Component {
               :
               null
           }
+          <MenuItem onClick={() => window.open(`https://github.com/honmanyau/freecodecamp-voting-app`)}>GitHub Repository</MenuItem>
         </Drawer>
 
         {!this.props.user.inProgress && this.props.user.authenticated && this.props.user.redirect ? <Redirect to={this.props.user.redirectLocation} /> : null}
