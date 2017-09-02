@@ -1,10 +1,12 @@
 import firebase, { twitterAuthProvider } from '../firebase';
 
+
+
 export const AUTH_IN_PROGRESS = 'AUTH_IN_PROGRESS';
 export const AUTH_USER = 'AUTH_USER';
 export const AUTH_ERROR = 'AUTH_ERROR';
 export const SIGN_OUT_USER = 'SIGN_OUT_USER';
-
+export const REDIRECT = 'REDIRECT';
 
 export function checkAuth() {
   return function(dispatch) {
@@ -17,6 +19,8 @@ export function checkAuth() {
       else {
         dispatch(signOutUser());
       }
+
+      dispatch(authInProgress(false));
     });
   }
 }
@@ -30,7 +34,9 @@ export function checkProviderAuth() {
         if (result && !result.user) {
           dispatch(authInProgress(false));
         }
-        // authUser(result.user) is not invoked here as checkAuth() is already listening to the change
+        else if (result.user) {
+          dispatch(redirect(true, '/dashboard'));
+        }
       })
       .catch(error => console.log('Error occured during provider authentication.', error))
   }
@@ -112,6 +118,16 @@ export function authError(error) {
     type: AUTH_ERROR,
     payload: {
       error
+    }
+  }
+}
+
+export function redirect(redirect, redirectLocation = null) {
+  return {
+    type: REDIRECT,
+    payload: {
+      redirect,
+      redirectLocation
     }
   }
 }

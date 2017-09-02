@@ -1,4 +1,4 @@
-import { AUTH_IN_PROGRESS, AUTH_USER, AUTH_ERROR, SIGN_OUT_USER } from '../actions/auth';
+import { AUTH_IN_PROGRESS, AUTH_USER, AUTH_ERROR, SIGN_OUT_USER, REDIRECT } from '../actions/auth';
 
 
 
@@ -6,7 +6,9 @@ const authInitialState = {
   inProgress: true,
   authenticated: false,
   data: null,
-  error: null
+  error: null,
+  redirect: false,
+  redirectLocation: null
 }
 
 export function user(state = authInitialState, action) {
@@ -38,6 +40,13 @@ export function user(state = authInitialState, action) {
         authenticated: false,
         data: null,
         error: null
+      });
+
+    case REDIRECT:
+    console.log('REDIRECT SET', action.payload.redirect, action.payload.redirectLocation)
+      return Object.assign({}, state, {
+        redirect: action.payload.redirect,
+        redirectLocation: action.payload.redirectLocation
       });
 
     default:
