@@ -181,15 +181,25 @@ class PollsCardPrivate extends Component {
           this.state.delete ?
             <RaisedButton
               secondary
-              label="Confirm Delete"
+              label="--Confirm Delete--"
               onClick={() => this.props.actions.deletePoll(this.props.pollData)}
             />
             :
             <RaisedButton
+              secondary
               label="Delete Poll"
               onClick={() => this.setState({delete: true})}
             />
         }
+
+        <br />
+
+        <RaisedButton
+          label="Tweet"
+          backgroundColor='#00aced'
+          labelColor='white'
+          onClick={() => window.open(`https://twitter.com/intent/tweet?text=Vote%20on%20Volt%3A%20${this.props.pollData.title}%0D%0A%0D%0Ahttps://freecodecamp-volt.firebaseapp.com/poll/${this.props.pollData.id}`)}
+        />
       </div>
     )
   }

@@ -74,7 +74,8 @@ class Auth extends Component {
           }
         </Drawer>
 
-        {this.props.user.authenticated && !this.props.user.inProgress ? <Redirect to='/dashboard' /> : null}
+        {//this.props.user.authenticated && !this.props.user.inProgress ? <Redirect to='/dashboard' /> : null
+      }
       </div>
     )
   }
