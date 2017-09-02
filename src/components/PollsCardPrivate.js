@@ -40,8 +40,6 @@ class PollsCardPrivate extends Component {
         error: null
       }
     });
-
-    //this.props.pollData.options.map(option => option.item)
   }
 
   addOption() {

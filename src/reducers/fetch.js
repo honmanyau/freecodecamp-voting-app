@@ -1,4 +1,4 @@
-import { FETCHING_POLLS, STORE_POLLS, FETCH_ERROR, CREATING_POLL } from '../actions/fetch';
+import { FETCHING_POLLS, STORE_POLLS, FETCH_ERROR, CREATING_POLL, SUBMITTING_VOTE } from '../actions/fetch';
 
 
 
@@ -33,7 +33,14 @@ export function fetch(state = fetchInitialState, action) {
         isFetching: false,
         content: action.payload.tempPolls,
         error: null
-      })
+      });
+
+    case SUBMITTING_VOTE:
+      return Object.assign({}, state, {
+        isFetching: false,
+        content: action.payload.tempPolls,
+        error: null
+      });
 
     default:
       return state;

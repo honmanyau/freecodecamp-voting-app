@@ -8,6 +8,7 @@ export const FETCH_USER_POLLS = 'FETCH_USER_POLLS';
 export const STORE_POLLS = 'STORE_POLLS';
 export const FETCH_ERROR = 'FETCH_ERROR';
 export const CREATING_POLL = 'CREATING_POLL';
+export const SUBMITTING_VOTE = 'SUBMITTING_VOTE';
 
 export function fetchLatestPolls() {
   return function(dispatch) {
@@ -63,6 +64,15 @@ export function fetchError(error) {
 export function creatingPoll(tempPolls) {
   return {
     type: CREATING_POLL,
+    payload: {
+      tempPolls
+    }
+  }
+}
+
+export function submittingVote(tempPolls) {
+  return {
+    type: SUBMITTING_VOTE,
     payload: {
       tempPolls
     }

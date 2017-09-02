@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as PollActions from '../actions/poll';
+import * as FetchActions from '../actions/fetch';
 
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -19,6 +20,22 @@ class PollsCardPublic extends Component {
       value: 0,
       delete: false
     }
+  }
+
+  handleSubmitVoteButtonClick() {
+    const polls = Object.assign({}, this.props.fetch.content);
+    const newPolls = Object.keys(polls).map(key => {
+      const poll = polls[key];
+
+      if (polls[key].id === this.props.pollData.id) {
+        poll.options[this.state.value].votes += 1;
+      }
+
+      return poll;
+    });
+    
+    this.props.actions.submittingVote(newPolls);
+    this.props.actions.submitVote(this.props.pollData.id, this.state.value);
   }
 
   render() {
@@ -52,17 +69,23 @@ class PollsCardPublic extends Component {
         <RaisedButton
           primary
           label="Submit Vote"
-          onClick={() => this.props.actions.submitVote(this.props.pollData.id, this.state.value)}
+          onClick={() => this.handleSubmitVoteButtonClick()}
         />
       </div>
     )
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = (state) => {
   return {
-    actions: bindActionCreators(PollActions, dispatch)
+    fetch: state.fetch
   }
 }
 
-export default connect(null, mapDispatchToProps)(PollsCardPublic);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: bindActionCreators(Object.assign({}, PollActions, FetchActions), dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PollsCardPublic);
