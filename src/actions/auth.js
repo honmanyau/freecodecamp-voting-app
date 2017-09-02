@@ -31,10 +31,7 @@ export function checkProviderAuth() {
 
     firebase.auth().getRedirectResult()
       .then(result => {
-        if (result && !result.user) {
-          dispatch(authInProgress(false));
-        }
-        else if (result.user) {
+        if (result.user) {
           dispatch(redirect(true, '/dashboard'));
         }
       })
