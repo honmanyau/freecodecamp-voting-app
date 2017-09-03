@@ -58,8 +58,10 @@ class PollsCardPrivate extends Component {
 
   handleEditPollButtonClick() {
     const arr = this.state.pollOptions.options;
+    const filteredArr = arr.filter(item => item !== "");
+    const setFilteredArr = Array.from(new Set([...filteredArr]));
     const oldArr = this.props.pollData.options.map(option => option.item);
-    const testArr = Array.from(new Set([...arr, ...oldArr]));
+    const testArr = Array.from(new Set([...filteredArr, ...oldArr]));
 
     if (!this.state.title.text) {
       this.setState({
@@ -69,7 +71,7 @@ class PollsCardPrivate extends Component {
         }
       });
     }
-    else if (arr.length + oldArr.length !== testArr.length) {
+    else if (setFilteredArr.length !== filteredArr.length || filteredArr.length + oldArr.length !== testArr.length) {
       this.setState({
         pollOptions: {
           options: this.state.pollOptions.options,
@@ -80,8 +82,8 @@ class PollsCardPrivate extends Component {
     else {
       const editedPoll = Object.assign({}, this.props.pollData, {
         title: this.state.title.text,
-        options: arr.filter(item => item.length > 0).length > 0 ?
-          this.state.pollOptions.options.map(option => {return {item: option}})
+        options: filteredArr.length > 0 ?
+          filteredArr.map(option => {return {item: option}})
           :
           null
       });

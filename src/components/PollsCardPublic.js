@@ -33,9 +33,9 @@ class PollsCardPublic extends Component {
 
       return poll;
     });
-    
-    this.props.actions.submittingVote(newPolls);
+
     this.props.actions.submitVote(this.props.pollData.id, this.state.value);
+    this.props.actions.submittingVote(newPolls);
   }
 
   render() {

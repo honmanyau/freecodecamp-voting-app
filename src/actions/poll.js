@@ -8,20 +8,32 @@ export const EDIT_POLL = 'ADD_POLL_ITEM';
 
 
 
-export function submitVote(pollId, option) {
-  const path = `/voting-app/polls/${pollId}/options/${option}/count`;
-  console.log(path);
+export function submitVote(id, option, count = 1) {
+  const path = `/voting-app/polls/${id}/options/${option}/votes`;
 
   return function(dispatch) {
-    firebase.database().ref(path).once('value')
-      .then(snapshot => {
-        return firebase.database().ref(path).set(snapshot.val() + 1)
-          .then(() => console.log("Successfully updated option " + option + "'s count of poll " + pollId + "."))
-          .catch(error => console.log("Error occured when updating option " + option + "'s of poll " + pollId + "."));
+    const newKey = firebase.database().ref(`/voting-app/public/`).push().key;
+
+    firebase.database().ref(`/voting-app/public/${newKey}`).set({
+      id,
+      option
+    })
+      .then(() => {
+        firebase.database().ref(path).once('value')
+          .then(snapshot => {
+            firebase.database().ref(path).set(snapshot.val() + 1)
+              .then(() => {
+                console.log('Vote count successfully updated for poll ' + id + ' option ' + option + '.')
+
+                firebase.database().ref(`/voting-app/public/${newKey}`).set(null)
+                  .then(() => console.log('Vote count successfully updated for poll ' + id + ' option ' + option + '.'))
+                  .catch(() => console.log('Error when cleaning up after updating a poll.'))
+              })
+              .catch(error => console.log('Error occured when updating vote count for poll ' + id + ' option ' + option + '.', error))
+          })
+          .catch(error => console.log('Error happene when reading vote value of poll ' + id + ' option ' + option + '.', error))
       })
-      .catch(error => {
-        return console.log("Error when getting a snapshot of: ", path)
-      });
+      .catch(error => console.log('Error when preparing a vote.', error));
   }
 }
 
