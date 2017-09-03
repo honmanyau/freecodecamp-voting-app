@@ -21,7 +21,7 @@ class Auth extends Component {
     }
   }
 
-  handleButtonClick = () => {
+  handleButtonClick() {
     if (this.props.user.authenticated) {
       this.props.actions.signOutUser();
       this.props.history.push('/');
